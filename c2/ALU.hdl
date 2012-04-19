@@ -46,4 +46,30 @@ CHIP ALU {
 
     PARTS:
     // Put your code here.
+    Mux16(a=x, b[0..15]=false, sel=zx, out=x1); // if (zx==1) set x = 0        // 16-bit constant
+	
+	Not16(in=x1, out=notx1);
+    Mux16(a=x1, b=notx1, sel=nx, out=x2); // if (nx==1) set x = ~x       // bitwise "not"
+	
+	Mux16(a=y, b[0..15]=false, sel=zy, out=y1); // if (zy==1) set y = 0        // 16-bit constant
+	
+	Not16(in=y1, out=noty1);
+    Mux16(a=y1, b=noty1, sel=ny, out=y2); // if (ny==1) set y = ~y       // bitwise "not"
+
+    Add16(a=x2, b=y2, out=out1);// if (f==1)  set out = x + y  // integer 2's complement addition
+    And16(a=x2, b=y2, out=out2);// if (f==0)  set out = x & y  // bitwise "and"
+    Mux16(a=out2, b=out1, sel=f, out=out3); 
+
+
+    Not16(in=out3, out=out4);// if (no==1) set out = ~out   // bitwise "not"
+	Mux16(a=out3, b=out4, sel=no, out=out, out=pout, out[15]=ng, out[0..7]=a, out[8..15]=b);
+
+
+	Or8Way(in=a, out=zr1);
+	Or8Way(in=b, out=zr2);
+	Or(a=zr1, b=zr2, out=zr3);
+	Not(in=zr3,out=zr);
+
+   
+
 }
