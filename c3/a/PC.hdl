@@ -16,10 +16,10 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    Add16(a=in, b[15]=inc, out=add);//else if (inc[t]==1)   out[t+1] = out[t] + 1  (integer addition)
+    Add16(a=outin, b[0]=inc, out=add);//else if (inc[t]==1)   out[t+1] = out[t] + 1  (integer addition)
     Mux16(a=add, b=in, sel=load, out=out2);
 	Mux16(a=out2, b[0..15]=false, sel=reset, out=out1);
-	Register(in=out1,load=true,out=out);//else                  out[t+1] = out[t]
+	Register(in=out1,load=true,out=out, out=outin);//else                  out[t+1] = out[t]
 
 }
 
